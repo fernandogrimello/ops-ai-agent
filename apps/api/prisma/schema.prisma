@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(OPERATOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tickets   Ticket[]
+  tasks     Task[]
+  logs      AgentLog[]
+}
+
+enum Role {
+  ADMIN
+  OPERATOR
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?  @unique
+  phone     String?
+  company   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tickets   Ticket[]
+}
+
+model Ticket {
+  id          String       @id @default(cuid())
+  title       String
+  description String
+  status      TicketStatus @default(OPEN)
+  priority    Priority     @default(MEDIUM)
+  category    String?
+  summary     String?
+  customerId  String
+  assignedTo  String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  customer    Customer     @relation(fields: [customerId], references: [id])
+  assignee    User?        @relation(fields: [assignedTo], references: [id])
+  tasks       Task[]
+  logs        AgentLog[]
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  status      TaskStatus @default(PENDING)
+  ticketId    String?
+  assignedTo  String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  ticket      Ticket?    @relation(fields: [ticketId], references: [id])
+  assignee    User?      @relation(fields: [assignedTo], references: [id])
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  DONE
+}
+
+model AgentLog {
+  id        String   @id @default(cuid())
+  action    String
+  input     String?
+  output    String?
+  ticketId  String?
+  userId    String?
+  createdAt DateTime @default(now())
+
+  ticket    Ticket?  @relation(fields: [ticketId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
+}
