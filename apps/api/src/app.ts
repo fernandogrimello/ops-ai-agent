@@ -3,6 +3,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 import authRoutes from "./routes/auth.routes"
 import customerRoutes from "./routes/customer.routes"
+import ticketRoutes from "./routes/ticket.routes"
 
 dotenv.config()
 
@@ -17,5 +18,6 @@ app.get("/health", (req, res) => {
 
 app.use("/auth", authRoutes)
 app.use("/customers", customerRoutes)
+app.use("/tickets", ticketRoutes)
 
 export default app
