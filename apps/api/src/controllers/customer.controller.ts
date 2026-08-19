@@ -19,7 +19,7 @@ export async function listCustomers(req: AuthRequest, res: Response): Promise<vo
 export async function getCustomer(req: AuthRequest, res: Response): Promise<void> {
   try {
     const customer = await prisma.customer.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: { tickets: { orderBy: { createdAt: 'desc' }, take: 10 } }
     })
     if (!customer) {
@@ -60,7 +60,7 @@ export async function updateCustomer(req: AuthRequest, res: Response): Promise<v
       return
     }
     const customer = await prisma.customer.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: parsed.data
     })
     res.json(customer)
@@ -76,7 +76,7 @@ export async function updateCustomer(req: AuthRequest, res: Response): Promise<v
 
 export async function deleteCustomer(req: AuthRequest, res: Response): Promise<void> {
   try {
-    await prisma.customer.delete({ where: { id: req.params.id } })
+    await prisma.customer.delete({ where: { id: String(req.params.id) } })
     res.status(204).send()
   } catch (err: any) {
     if (err.code === 'P2025') {

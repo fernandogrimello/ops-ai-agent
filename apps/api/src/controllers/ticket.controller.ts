@@ -24,7 +24,7 @@ export async function listTickets(req: AuthRequest, res: Response): Promise<void
 export async function getTicket(req: AuthRequest, res: Response): Promise<void> {
   try {
     const ticket = await prisma.ticket.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: {
         customer: true,
         assignee: { select: { id: true, name: true } },
@@ -100,7 +100,7 @@ export async function updateTicket(req: AuthRequest, res: Response): Promise<voi
       return
     }
     const ticket = await prisma.ticket.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: parsed.data
     })
     res.json(ticket)
