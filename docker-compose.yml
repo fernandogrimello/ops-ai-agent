@@ -77,6 +77,27 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
 
+
+  waha:
+    image: devlikeapro/waha
+    container_name: ops-waha
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    volumes:
+      - waha_data:/app/.sessions
+    environment:
+      WHATSAPP_DEFAULT_ENGINE: NOWEB
+      WAHA_MEDIA_STORAGE: LOCAL
+      WHATSAPP_API_KEY: ""
+      WAHA_DASHBOARD_ENABLED: true
+      WAHA_DASHBOARD_USERNAME: admin
+      WAHA_DASHBOARD_PASSWORD: admin123
+      WHATSAPP_SWAGGER_USERNAME: admin
+      WHATSAPP_SWAGGER_PASSWORD: admin123
+      WAHA_API_KEY: ${WAHA_API_KEY:-waha-api-key-123}
+
 volumes:
   postgres_data:
   n8n_data:
+  waha_data:
