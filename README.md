@@ -8,12 +8,21 @@ Desenvolvido como laboratorio pratico para explorar agentes de IA, automacao de 
 
 Empresas de servicos recebem dezenas de solicitacoes por dia e perdem tempo classificando manualmente cada uma, cadastrando clientes, criando tarefas e distribuindo os servicos. O objetivo deste projeto e automatizar esse fluxo usando IA.
 
+## Arquitetura
+
+WhatsApp -> WAHA -> n8n Webhook -> API (Node.js/Express) -> IA classifica -> PostgreSQL -> WAHA responde ao cliente
+
 ## Tecnologias
 
-**Backend:** Node.js, Express, TypeScript, Prisma ORM, PostgreSQL
-**IA:** Google Gemini API, agente com ferramentas, OpenClaw skills
-**Automacao:** n8n (webhook + condicional + HTTP)
-**Infra:** Docker, Docker Compose, Git, GitHub
+| Camada | Tecnologia |
+|---|---|
+| Backend | Node.js, Express, TypeScript, Prisma ORM |
+| Banco | PostgreSQL 16 |
+| IA | Google Gemini API, agente com ferramentas |
+| WhatsApp | WAHA (engine NOWEB) |
+| Automacao | n8n (webhook + HTTP requests) |
+| Infra | Docker, Docker Compose |
+| Testes | Jest, Supertest, k6 |
 
 ## API
 
@@ -29,26 +38,67 @@ Empresas de servicos recebem dezenas de solicitacoes por dia e perdem tempo clas
 | GET | /agent/logs | Historico de acoes do agente |
 | GET | /health | Health check |
 
+## Testes
+
+### Suite de testes (Jest + Supertest)
+
+cd apps/api && npm test
+
+| Suite | Testes | Cobertura |
+|---|---|---|
+| auth.test.ts | 5 | Login, token JWT, /me |
+| tickets.test.ts | 6 | CRUD + mock IA |
+| customers.test.ts | 7 | CRUD + validacoes |
+| agent.test.ts | 5 | Chat + logs + mock IA |
+| security.test.ts | 10 | Headers, auth, injecao |
+| **Total** | **33** | **57%** |
+
+### Teste de performance (k6)
+
+k6 run tests/performance/load-test.js
+
+| Metrica | Resultado | Threshold |
+|---|---|---|
+| p95 latencia | 10ms | < 500ms |
+| Taxa de erros | 0% | < 5% |
+| Requisicoes/s | 22 | -- |
+| Usuarios simultaneos | 10 | -- |
+| Checks passando | 6370/6370 | 100% |
+
 ## Como executar
 
-```bash
 git clone https://github.com/fernandogrimello/ops-ai-agent.git
 cd ops-ai-agent
 cp .env.example .env
-docker compose up postgres n8n -d
+docker compose up -d
 cd apps/api && npm install
 npx prisma migrate dev
 npx tsx src/server.ts
-```
+
+## Servicos
+
+| Servico | Porta |
+|---|---|
+| API | 3001 |
+| Frontend | 3000 |
+| PostgreSQL | 5433 |
+| n8n | 5678 |
+| WAHA | 3002 |
+
+## Documentacao
+
+- [Arquitetura](docs/01-arquitetura.md)
+- [Banco de dados](docs/02-banco-de-dados.md)
+- [Agente IA](docs/03-agente.md)
+- [Decisoes tecnicas](docs/04-decisoes-tecnicas.md)
+- [Problemas e solucoes](docs/05-problemas-e-solucoes.md)
+- [Testes](docs/06-testes.md)
 
 ## Desafios encontrados
 
 - Prisma 7 mudou completamente a forma de configurar datasource
-- n8n dentro do Docker nao acessa localhost do host - necessario usar IP 172.17.0.1
-- Google Gemini descontinuou modelos antigos - necessario listar modelos via API
-- SDK @google/generative-ai incompativel com chaves AQ. - migrado para @google/genai
-
-## Autor
-
-Luiz Fernando Grimello
-github.com/fernandogrimello
+- n8n dentro do Docker nao acessa localhost do host -- necessario usar IP 172.17.0.1
+- Google Gemini descontinuou modelos antigos -- migrado para gemini-3.5-flash
+- SDK @google/generative-ai incompativel com chaves AQ. -- migrado para @google/genai
+- WAHA engine WEBJS apresentou erro No LID for user -- migrado para NOWEB
+- TypeScript 7 incompativel com ts-jest -- downgrade para TS 5.8
