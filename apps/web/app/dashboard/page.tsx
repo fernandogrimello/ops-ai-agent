@@ -41,16 +41,14 @@ export default function DashboardPage() {
 
   async function loadData() {
     try {
-      const [ticketsRes, logsRes, summaryRes] = await Promise.all([
+      const [ticketsRes, logsRes] = await Promise.all([
         api.get("/tickets"),
         api.get("/agent/logs"),
-        api.post("/agent/chat", { message: "Me da um resumo geral dos atendimentos abertos" }),
       ])
       setTickets(ticketsRes.data)
       setLogs(logsRes.data)
-      setSummary(null)
-    } catch {
-      router.push("/login")
+    } catch (err: any) {
+      if (err?.response?.status === 401) router.push("/login")
     }
   }
 
