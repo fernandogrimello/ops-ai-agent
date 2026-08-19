@@ -102,3 +102,30 @@ npx tsx src/server.ts
 - SDK @google/generative-ai incompativel com chaves AQ. -- migrado para @google/genai
 - WAHA engine WEBJS apresentou erro No LID for user -- migrado para NOWEB
 - TypeScript 7 incompativel com ts-jest -- downgrade para TS 5.8
+## Roadmap de testes
+
+O projeto esta em fase de evolucao para producao. Abaixo o status atual e o que esta sendo implementado:
+
+### Implementado
+
+| Tipo | Ferramenta | Status |
+|---|---|---|
+| Integracao (auth, tickets, customers, agent) | Jest + Supertest | 33 testes passando |
+| Seguranca (headers, auth, injecao) | Jest + Supertest | 10 testes passando |
+| Performance - load test | k6 | p95=10ms, 0% erros, 10 VUs |
+
+### Em andamento
+
+| Tipo | Descricao |
+|---|---|
+| Cobertura de controllers | GET/:id, PUT e DELETE de tickets e customers |
+| Testes unitarios | ai.service.ts, ticket.tools.ts, ops.agent.ts |
+| Testes de contrato | Garantir que o contrato da API nao quebra o frontend |
+| Performance - stress test | Aumentar carga ate 50/100 VUs para encontrar limite |
+| Performance - spike test | Pico repentino de trafego |
+| Performance - soak test | Execucao prolongada para detectar memory leak |
+| Rate limiting | Implementar e testar limite de requisicoes por IP |
+| Frontend - testes de componente | React Testing Library nos componentes extraidos |
+| Frontend - testes E2E | Playwright simulando fluxo real no browser |
+| Webhook - testes de integracao | Simular payloads da Meta WhatsApp no n8n |
+| CI/CD | GitHub Actions rodando testes em todo PR |
