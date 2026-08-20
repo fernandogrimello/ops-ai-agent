@@ -27,7 +27,7 @@ async function seed() {
   })
 
   console.log("Seed concluido!")
-  await prisma.()
+  await prisma.$disconnect()
 }
 
 seed().catch(console.error)
