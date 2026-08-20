@@ -57,8 +57,10 @@ cd apps/api && npm test
 | ai.service.test.ts | 4 | Unitario — classificacao IA, fallbacks |
 | ops.agent.test.ts | 6 | Unitario — agente, tool calls, logs |
 | components.test.tsx | 13 | Frontend — PriorityBadge, StatusBadge, StatsCard, TicketTable |
+| auth.spec.ts | 4 | E2E — login, erro, redirecionamento |
+| dashboard.spec.ts | 4 | E2E — metricas, tickets, abas, logout |
 | ticket.tools.test.ts | 9 | Unitario — ferramentas do agente |
-| **Total** | **84** | **79%** |
+| **Total** | **92** | **79%** |
 
 ### Teste de performance (k6)
 
