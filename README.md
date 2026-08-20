@@ -132,3 +132,17 @@ O projeto esta em fase de evolucao para producao. Abaixo o status atual e o que 
 | Frontend - testes E2E | Playwright simulando fluxo real no browser |
 | Webhook - testes de integracao | Simular payloads da Meta WhatsApp no n8n |
 | CI/CD | GitHub Actions rodando testes em todo PR |
+
+## Seguranca e vulnerabilidades conhecidas
+
+### CVE: deepmerge-ts (GHSA-ggr8-5vv4-36mx)
+
+**Severidade:** High
+**Componente afetado:** deepmerge-ts < 8.0.0 (dependencia interna do Prisma 7.x)
+**Status:** Aguardando correcao upstream pelo time do Prisma
+
+Esta vulnerabilidade esta presente internamente no Prisma ORM e nao e exposta diretamente pelo codigo da aplicacao. O fix disponivel via npm audit fix --force exigiria downgrade do Prisma de 7.x para 6.x, o que quebraria a arquitetura atual que usa prisma.config.ts e o adapter PrismaPg.
+
+A aplicacao sera atualizada assim que o Prisma lanctar uma versao 7.x com o fix incorporado.
+
+Referencia: https://github.com/advisories/GHSA-ggr8-5vv4-36mx
