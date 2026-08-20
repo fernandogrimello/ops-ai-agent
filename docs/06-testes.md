@@ -108,3 +108,46 @@ k6 run tests/performance/load-test.js
 - Testes rodam contra banco PostgreSQL real (nao in-memory) para maior fidelidade
 - Teardown do Prisma no setup.ts para fechar conexoes apos os testes
 - TypeScript downgrade de 7.0 para 5.8 por incompatibilidade com ts-jest
+## Stress test (k6)
+
+### Como rodar
+
+k6 run tests/performance/stress-test.js
+
+### Cenario
+
+- Ramp up: 0 -> 10 -> 50 -> 100 usuarios
+- Duracao total: 3 minutos
+- Threshold: p95 < 2000ms, erros < 10%
+
+### Resultados
+
+| Metrica | Resultado | Threshold | Status |
+|---|---|---|---|
+| p95 latencia | 11.94ms | < 2000ms | PASSOU |
+| Taxa de erros | 0% | < 10% | PASSOU |
+| Requisicoes/s | 172 | -- | -- |
+| Usuarios simultaneos | 100 | -- | -- |
+| Checks passando | 46710/46710 | 100% | PASSOU |
+
+## Spike test (k6)
+
+### Como rodar
+
+k6 run tests/performance/spike-test.js
+
+### Cenario
+
+- Pico repentino: 5 -> 100 usuarios em 10s
+- Sustenta 100 usuarios por 30s
+- Retorna a 0 em 10s
+- Threshold: p95 < 3000ms, erros < 15%
+
+### Resultados
+
+| Metrica | Resultado | Threshold | Status |
+|---|---|---|---|
+| p95 latencia | 15.56ms | < 3000ms | PASSOU |
+| Taxa de erros | 0% | < 15% | PASSOU |
+| Requisicoes/s | 378 | -- | -- |
+| Checks passando | 39927/39927 | 100% | PASSOU |

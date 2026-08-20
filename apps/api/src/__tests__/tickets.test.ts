@@ -1,3 +1,27 @@
+/**
+ * @file tickets.test.ts
+ * @description Testes de integracao para as rotas de tickets (atendimentos) da API.
+ *
+ * O que cobre:
+ * - Listagem de tickets com autenticacao
+ * - Criacao de ticket com classificacao automatica por IA (mockada)
+ * - Busca de ticket por ID
+ * - Atualizacao de status do ticket
+ * - Validacao de campos obrigatorios
+ * - Controle de acesso via JWT
+ *
+ * O que garante:
+ * - Que tickets sao criados corretamente com titulo, descricao e cliente
+ * - Que a IA classifica o ticket (prioridade, categoria) — mockada para nao consumir quota
+ * - Que tickets podem ser buscados e atualizados por ID
+ * - Que IDs inexistentes retornam 404
+ * - Que todas as rotas exigem autenticacao (401 sem token)
+ *
+ * Decisoes de design:
+ * - classifyTicket mockado para isolar logica de negocio da API externa do Gemini
+ * - Testa contra banco PostgreSQL real para maior fidelidade
+ * - beforeAll compartilha token entre todos os testes do arquivo
+ */
 import request from "supertest"
 import app from "../app"
 

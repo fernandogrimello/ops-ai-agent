@@ -1,3 +1,29 @@
+/**
+ * @file customers.test.ts
+ * @description Testes de integracao para as rotas de clientes da API.
+ *
+ * O que cobre:
+ * - Listagem de clientes com autenticacao
+ * - Criacao de cliente com dados validos e invalidos
+ * - Busca de cliente por ID
+ * - Atualizacao de dados do cliente
+ * - Exclusao de cliente
+ * - Validacao de unicidade de email (409 em duplicata)
+ * - Controle de acesso via JWT
+ *
+ * O que garante:
+ * - Que clientes sao criados com os dados corretos
+ * - Que emails duplicados sao rejeitados com 409
+ * - Que campos obrigatorios sao validados (400 sem nome)
+ * - Que clientes podem ser buscados, atualizados e deletados por ID
+ * - Que IDs inexistentes retornam 404
+ * - Que todas as rotas exigem autenticacao (401 sem token)
+ *
+ * Decisoes de design:
+ * - Usa timestamp no email para garantir unicidade entre execucoes
+ * - Cria e deleta cliente proprio no teste de DELETE para nao afetar dados de outros testes
+ * - Testa contra banco PostgreSQL real para maior fidelidade
+ */
 import request from "supertest"
 import app from "../app"
 

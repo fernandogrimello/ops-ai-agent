@@ -1,3 +1,27 @@
+/**
+ * @file security.test.ts
+ * @description Testes de seguranca da API — headers, autenticacao, injecao e rate limiting.
+ *
+ * O que cobre:
+ * - Headers de seguranca HTTP (helmet)
+ * - Rejeicao de tokens JWT invalidos, malformados e com assinatura incorreta
+ * - Bloqueio de payloads com tentativa de SQL injection
+ * - Ausencia de stack trace exposto em respostas de erro
+ * - Presenca de headers de rate limiting
+ *
+ * O que garante:
+ * - Que o helmet esta ativo e configurando corretamente os headers de seguranca
+ * - Que X-Powered-By nao e exposto (evita fingerprinting do servidor)
+ * - Que tokens invalidos sao sempre rejeitados com 401
+ * - Que inputs maliciosos sao bloqueados pelo Zod antes de chegar ao banco
+ * - Que erros internos nao vazam stack trace para o cliente
+ * - Que o rate limiter esta ativo e retornando os headers corretos
+ *
+ * Decisoes de design:
+ * - Testa seguranca em camada de middleware, antes da logica de negocio
+ * - Usa inputs extremos (payload gigante, SQL injection) para validar robustez
+ * - Rate limiting configurado para 100 req/15min por IP
+ */
 import request from "supertest"
 import app from "../app"
 

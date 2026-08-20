@@ -1,3 +1,24 @@
+/**
+ * @file auth.test.ts
+ * @description Testes de integracao para as rotas de autenticacao da API.
+ *
+ * O que cobre:
+ * - Fluxo completo de login com credenciais validas e invalidas
+ * - Validacao de schema do body (email invalido, campos faltando)
+ * - Geracao e retorno de token JWT apos login bem-sucedido
+ * - Rota protegida /auth/me com e sem token
+ *
+ * O que garante:
+ * - Que usuarios validos conseguem se autenticar e receber um token
+ * - Que credenciais invalidas sao rejeitadas com status 401
+ * - Que dados malformados sao rejeitados com status 400 antes de chegar ao banco
+ * - Que rotas protegidas bloqueiam acesso sem token (401)
+ * - Que o token gerado permite acesso aos dados do usuario logado
+ *
+ * Decisoes de design:
+ * - Testa contra banco PostgreSQL real para maior fidelidade
+ * - Nao usa mocks de autenticacao — valida o fluxo completo
+ */
 import request from "supertest"
 import app from "../app"
 

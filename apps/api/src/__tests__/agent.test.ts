@@ -1,3 +1,24 @@
+/**
+ * @file agent.test.ts
+ * @description Testes de integracao para as rotas do agente operacional de IA.
+ *
+ * O que cobre:
+ * - Envio de mensagens para o agente via /agent/chat
+ * - Validacao de campos obrigatorios (mensagem vazia)
+ * - Listagem do historico de logs do agente
+ * - Controle de acesso via JWT
+ *
+ * O que garante:
+ * - Que o agente responde com texto ao receber uma mensagem valida
+ * - Que mensagens vazias sao rejeitadas com 400
+ * - Que o historico de logs e retornado como array
+ * - Que todas as rotas exigem autenticacao (401 sem token)
+ *
+ * Decisoes de design:
+ * - runAgent mockado para isolar a logica da API do Google Gemini
+ * - Mock evita consumo de quota da API gratuita durante os testes
+ * - Testa o contrato da rota (entrada/saida) sem depender da IA real
+ */
 import request from "supertest"
 import app from "../app"
 
