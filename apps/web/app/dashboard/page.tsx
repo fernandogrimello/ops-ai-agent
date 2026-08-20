@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation"
 import api from "@/lib/api"
 import { Ticket, AgentLog, Summary } from "@/lib/types"
 import { AlertTriangle, CheckCircle, Clock, MessageSquare, LogOut } from "lucide-react"
+import { StatsCard } from "@/components/StatsCard"
+import { TicketTable } from "@/components/TicketTable"
 
 const priorityColor: Record<string, string> = {
   CRITICAL: "text-red-400 bg-red-400/10",
@@ -95,27 +97,9 @@ export default function DashboardPage() {
 
       <main className="p-6">
         <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <AlertTriangle size={16} className="text-red-400" />
-              <span className="text-sm text-gray-400">Criticos</span>
-            </div>
-            <p className="text-3xl font-bold text-red-400">{criticalCount}</p>
-          </div>
-          <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Clock size={16} className="text-blue-400" />
-              <span className="text-sm text-gray-400">Em Aberto</span>
-            </div>
-            <p className="text-3xl font-bold text-blue-400">{openCount}</p>
-          </div>
-          <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <CheckCircle size={16} className="text-green-400" />
-              <span className="text-sm text-gray-400">Resolvidos</span>
-            </div>
-            <p className="text-3xl font-bold text-green-400">{resolvedCount}</p>
-          </div>
+          <StatsCard icon={<AlertTriangle size={16} className="text-red-400" />} label="Criticos" value={criticalCount} color="text-red-400" />
+          <StatsCard icon={<Clock size={16} className="text-blue-400" />} label="Em Aberto" value={openCount} color="text-blue-400" />
+          <StatsCard icon={<CheckCircle size={16} className="text-green-400" />} label="Resolvidos" value={resolvedCount} color="text-green-400" />
         </div>
 
         <div className="flex gap-2 mb-4">
@@ -135,51 +119,7 @@ export default function DashboardPage() {
         </div>
 
         {activeTab === "tickets" && (
-          <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-800">
-                  <th className="text-left text-xs text-gray-400 px-4 py-3">Titulo</th>
-                  <th className="text-left text-xs text-gray-400 px-4 py-3">Cliente</th>
-                  <th className="text-left text-xs text-gray-400 px-4 py-3">Prioridade</th>
-                  <th className="text-left text-xs text-gray-400 px-4 py-3">Status</th>
-                  <th className="text-left text-xs text-gray-400 px-4 py-3">Categoria</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tickets.map(ticket => (
-                  <tr key={ticket.id} className="border-b border-gray-800 hover:bg-gray-800/50">
-                    <td className="px-4 py-3">
-                      <p className="text-sm font-medium">{ticket.title}</p>
-                      {ticket.summary && <p className="text-xs text-gray-400 mt-0.5">{ticket.summary}</p>}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-300">
-                      {ticket.customer.name}
-                      {ticket.customer.company && <span className="text-gray-500"> / {ticket.customer.company}</span>}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`text-xs px-2 py-1 rounded font-medium ${priorityColor[ticket.priority]}`}>
-                        {ticket.priority}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`text-xs px-2 py-1 rounded font-medium ${statusColor[ticket.status]}`}>
-                        {ticket.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-400">{ticket.category || "-"}</td>
-                  </tr>
-                ))}
-                {tickets.length === 0 && (
-                  <tr>
-                    <td colSpan={5} className="px-4 py-8 text-center text-gray-500 text-sm">
-                      Nenhum atendimento encontrado
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+          <TicketTable tickets={tickets} />
         )}
 
         {activeTab === "agent" && (
