@@ -40,6 +40,12 @@ jobs:
         run: npm install
         working-directory: apps/api
 
+      - name: Generate Prisma client
+        run: npx prisma generate
+        working-directory: apps/api
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5433/ops_api
+
       - name: Run migrations
         run: npx prisma migrate deploy
         working-directory: apps/api
