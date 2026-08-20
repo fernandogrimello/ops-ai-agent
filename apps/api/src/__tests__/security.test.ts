@@ -127,4 +127,23 @@ describe("Security", () => {
     })
   })
 
+
+  describe("CORS", () => {
+    it("deve permitir origem localhost:3000", async () => {
+      const res = await request(app)
+        .get("/health")
+        .set("Origin", "http://localhost:3000")
+
+      expect(res.headers["access-control-allow-origin"]).toBe("http://localhost:3000")
+    })
+
+    it("deve bloquear origem nao permitida", async () => {
+      const res = await request(app)
+        .get("/health")
+        .set("Origin", "http://site-malicioso.com")
+
+      expect(res.headers["access-control-allow-origin"]).toBeUndefined()
+    })
+  })
+
 })
