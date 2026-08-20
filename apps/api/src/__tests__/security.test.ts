@@ -90,4 +90,17 @@ describe("Security", () => {
       expect([400, 401, 413]).toContain(res.status)
     })
   })
+
+  describe("Rate limiting", () => {
+    it("deve retornar header RateLimit-Limit", async () => {
+      const res = await request(app).get("/health")
+      expect(res.headers["ratelimit-limit"]).toBeDefined()
+    })
+
+    it("deve retornar header RateLimit-Remaining", async () => {
+      const res = await request(app).get("/health")
+      expect(res.headers["ratelimit-remaining"]).toBeDefined()
+    })
+  })
+
 })
