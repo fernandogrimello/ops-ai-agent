@@ -60,8 +60,9 @@ cd apps/api && npm test
 | auth.spec.ts | 4 | E2E — login, erro, redirecionamento |
 | dashboard.spec.ts | 4 | E2E — metricas, tickets, abas, logout |
 | contract.test.ts | 5 | Contrato — garante que a API nao quebra o frontend |
+| webhook.test.ts | 5 | Webhook — simula payloads reais da Meta WhatsApp |
 | ticket.tools.test.ts | 9 | Unitario — ferramentas do agente |
-| **Total** | **97** | **79%** |
+| **Total** | **102** | **79%** |
 
 ### Teste de performance (k6)
 
