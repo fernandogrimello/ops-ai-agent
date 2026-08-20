@@ -55,8 +55,9 @@ cd apps/api && npm test
 | agent.test.ts | 5 | Chat + logs + mock IA |
 | security.test.ts | 12 | Headers, auth, injecao, rate limit |
 | ai.service.test.ts | 4 | Unitario — classificacao IA, fallbacks |
+| ops.agent.test.ts | 6 | Unitario — agente, tool calls, logs |
 | ticket.tools.test.ts | 9 | Unitario — ferramentas do agente |
-| **Total** | **63** | **72%** |
+| **Total** | **71** | **79%** |
 
 ### Teste de performance (k6)
 

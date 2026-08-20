@@ -70,7 +70,7 @@ cd apps/api && npm run test:coverage
 | middleware/auth.ts | 92% | 100% | 100% | 92% |
 | controllers/ | 48% | 42% | 57% | 48% |
 | services/ai.service.ts | 100% | 50% | 100% | 100% |
-| **Total** | **72%** | **48%** | **82%** | **72%** |
+| **Total** | **79%** | **67%** | **89%** | **79%** |
 
 ## Testes de performance (k6)
 
