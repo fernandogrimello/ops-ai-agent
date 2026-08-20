@@ -28,6 +28,9 @@ Desenvolvido como laboratorio pratico para explorar agentes de IA, automacao de 
 ### Agente IA
 ![Agente IA](docs/screenshots/agent.png)
 
+### Logs do Agente
+![Logs](docs/screenshots/logs.png)
+
 ## O problema
 
 Empresas de servicos recebem dezenas de solicitacoes por dia e perdem tempo classificando manualmente cada uma, cadastrando clientes, criando tarefas e distribuindo os servicos. O objetivo deste projeto e automatizar esse fluxo usando IA.
