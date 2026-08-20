@@ -52,6 +52,12 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5433/ops_api
 
+      - name: Seed database
+        run: npx tsx src/seed.ts
+        working-directory: apps/api
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5433/ops_api
+
       - name: Run tests
         run: npm test
         working-directory: apps/api
