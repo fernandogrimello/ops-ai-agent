@@ -50,11 +50,13 @@ cd apps/api && npm test
 | Suite | Testes | Cobertura |
 |---|---|---|
 | auth.test.ts | 5 | Login, token JWT, /me |
-| tickets.test.ts | 6 | CRUD + mock IA |
-| customers.test.ts | 7 | CRUD + validacoes |
+| tickets.test.ts | 15 | CRUD + GET/:id + PUT/:id + mock IA |
+| customers.test.ts | 16 | CRUD + GET/:id + PUT/:id + DELETE/:id |
 | agent.test.ts | 5 | Chat + logs + mock IA |
-| security.test.ts | 10 | Headers, auth, injecao |
-| **Total** | **33** | **57%** |
+| security.test.ts | 12 | Headers, auth, injecao, rate limit |
+| ai.service.test.ts | 4 | Unitario — classificacao IA, fallbacks |
+| ticket.tools.test.ts | 9 | Unitario — ferramentas do agente |
+| **Total** | **63** | **72%** |
 
 ### Teste de performance (k6)
 
@@ -117,21 +119,28 @@ O projeto esta em fase de evolucao para producao. Abaixo o status atual e o que 
 | Seguranca (headers, auth, injecao) | Jest + Supertest | 10 testes passando |
 | Performance - load test | k6 | p95=10ms, 0% erros, 10 VUs |
 
-### Em andamento
+### Implementado recentemente
+
+| Tipo | Ferramenta | Status |
+|---|---|---|
+| Cobertura de controllers | Jest + Supertest | GET/:id, PUT, DELETE cobertos |
+| Testes unitarios ai.service | Jest | 100% cobertura, fallbacks testados |
+| Testes unitarios ticket.tools | Jest | 100% cobertura, Prisma mockado |
+| Performance - stress test | k6 | 100 VUs, p95=11ms, 0% erros |
+| Performance - spike test | k6 | Pico 100 VUs, p95=15ms, 0% erros |
+| Performance - soak test | k6 | 30min, p95=13ms, sem memory leak |
+| Rate limiting | express-rate-limit | 100 req/15min por IP |
+| CI/CD | GitHub Actions | Roda em todo push no main |
+
+### Pendente
 
 | Tipo | Descricao |
 |---|---|
-| Cobertura de controllers | GET/:id, PUT e DELETE de tickets e customers |
-| Testes unitarios | ai.service.ts, ticket.tools.ts, ops.agent.ts |
+| Testes unitarios ops.agent | Testar logica do agente de IA |
 | Testes de contrato | Garantir que o contrato da API nao quebra o frontend |
-| Performance - stress test | Aumentar carga ate 50/100 VUs para encontrar limite |
-| Performance - spike test | Pico repentino de trafego |
-| Performance - soak test | Execucao prolongada para detectar memory leak |
-| Rate limiting | Implementar e testar limite de requisicoes por IP |
 | Frontend - testes de componente | React Testing Library nos componentes extraidos |
 | Frontend - testes E2E | Playwright simulando fluxo real no browser |
 | Webhook - testes de integracao | Simular payloads da Meta WhatsApp no n8n |
-| CI/CD | GitHub Actions rodando testes em todo PR |
 
 ## Seguranca e vulnerabilidades conhecidas
 
