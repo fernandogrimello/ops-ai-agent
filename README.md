@@ -56,8 +56,9 @@ cd apps/api && npm test
 | security.test.ts | 12 | Headers, auth, injecao, rate limit |
 | ai.service.test.ts | 4 | Unitario — classificacao IA, fallbacks |
 | ops.agent.test.ts | 6 | Unitario — agente, tool calls, logs |
+| components.test.tsx | 13 | Frontend — PriorityBadge, StatusBadge, StatsCard, TicketTable |
 | ticket.tools.test.ts | 9 | Unitario — ferramentas do agente |
-| **Total** | **71** | **79%** |
+| **Total** | **84** | **79%** |
 
 ### Teste de performance (k6)
 
@@ -137,9 +138,9 @@ O projeto esta em fase de evolucao para producao. Abaixo o status atual e o que 
 
 | Tipo | Descricao |
 |---|---|
-| Testes unitarios ops.agent | Testar logica do agente de IA |
+
 | Testes de contrato | Garantir que o contrato da API nao quebra o frontend |
-| Frontend - testes de componente | React Testing Library nos componentes extraidos |
+
 | Frontend - testes E2E | Playwright simulando fluxo real no browser |
 | Webhook - testes de integracao | Simular payloads da Meta WhatsApp no n8n |
 
