@@ -52,7 +52,12 @@ describe("Tickets", () => {
         .set("Authorization", `Bearer ${token}`)
 
       expect(res.status).toBe(200)
-      expect(Array.isArray(res.body)).toBe(true)
+      expect(res.body).toHaveProperty("data")
+      expect(res.body).toHaveProperty("pagination")
+      expect(Array.isArray(res.body.data)).toBe(true)
+      expect(res.body.pagination).toHaveProperty("total")
+      expect(res.body.pagination).toHaveProperty("page")
+      expect(res.body.pagination).toHaveProperty("totalPages")
     })
 
     it("deve retornar 401 sem token", async () => {
@@ -121,8 +126,8 @@ describe("Ticket por ID", () => {
     const res = await request(app)
       .get("/tickets")
       .set("Authorization", `Bearer ${token}`)
-    if (res.body.length > 0) {
-      ticketId = res.body[0].id
+    if (res.body.data && res.body.data.length > 0) {
+      ticketId = res.body.data[0].id
     }
   })
 
@@ -179,6 +184,54 @@ describe("Ticket por ID", () => {
         .send({ status: "RESOLVED" })
 
       expect(res.status).toBe(401)
+    })
+  })
+})
+
+describe("Paginacao de tickets", () => {
+  it("deve retornar pagina 1 com limite padrao", async () => {
+    const res = await request(app)
+      .get("/tickets")
+      .set("Authorization", `Bearer ${token}`)
+
+    expect(res.status).toBe(200)
+    expect(res.body.pagination.page).toBe(1)
+    expect(res.body.pagination.limit).toBe(20)
+    expect(typeof res.body.pagination.total).toBe("number")
+    expect(typeof res.body.pagination.totalPages).toBe("number")
+    expect(typeof res.body.pagination.hasNext).toBe("boolean")
+    expect(typeof res.body.pagination.hasPrev).toBe("boolean")
+  })
+
+  it("deve respeitar parametro limit", async () => {
+    const res = await request(app)
+      .get("/tickets?limit=5")
+      .set("Authorization", `Bearer ${token}`)
+
+    expect(res.status).toBe(200)
+    expect(res.body.pagination.limit).toBe(5)
+    expect(res.body.data.length).toBeLessThanOrEqual(5)
+  })
+
+  it("deve filtrar por status", async () => {
+    const res = await request(app)
+      .get("/tickets?status=OPEN")
+      .set("Authorization", `Bearer ${token}`)
+
+    expect(res.status).toBe(200)
+    res.body.data.forEach((ticket: any) => {
+      expect(ticket.status).toBe("OPEN")
+    })
+  })
+
+  it("deve filtrar por priority", async () => {
+    const res = await request(app)
+      .get("/tickets?priority=CRITICAL")
+      .set("Authorization", `Bearer ${token}`)
+
+    expect(res.status).toBe(200)
+    res.body.data.forEach((ticket: any) => {
+      expect(ticket.priority).toBe("CRITICAL")
     })
   })
 })

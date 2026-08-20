@@ -83,8 +83,10 @@ describe("Contratos de API", () => {
         .set("Authorization", `Bearer ${token}`)
 
       expect(res.status).toBe(200)
-      expect(Array.isArray(res.body)).toBe(true)
-      res.body.forEach(validateTicket)
+      expect(res.body).toHaveProperty("data")
+      expect(res.body).toHaveProperty("pagination")
+      expect(Array.isArray(res.body.data)).toBe(true)
+      res.body.data.forEach(validateTicket)
     })
   })
 

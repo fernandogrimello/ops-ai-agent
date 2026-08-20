@@ -6,15 +6,43 @@ import { classifyTicket } from '../services/ai.service'
 
 export async function listTickets(req: AuthRequest, res: Response): Promise<void> {
   try {
-    const tickets = await prisma.ticket.findMany({
-      orderBy: { createdAt: 'desc' },
-      include: {
-        customer: { select: { id: true, name: true, company: true } },
-        assignee: { select: { id: true, name: true } },
-        _count: { select: { tasks: true } }
+    const page = Math.max(1, parseInt(req.query.page as string) || 1)
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit as string) || 20))
+    const skip = (page - 1) * limit
+
+    const status = req.query.status as string | undefined
+    const priority = req.query.priority as string | undefined
+
+    const where: any = {}
+    if (status) where.status = status
+    if (priority) where.priority = priority
+
+    const [tickets, total] = await Promise.all([
+      prisma.ticket.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+        include: {
+          customer: { select: { id: true, name: true, company: true } },
+          assignee: { select: { id: true, name: true } },
+          _count: { select: { tasks: true } }
+        }
+      }),
+      prisma.ticket.count({ where })
+    ])
+
+    res.json({
+      data: tickets,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasNext: page < Math.ceil(total / limit),
+        hasPrev: page > 1,
       }
     })
-    res.json(tickets)
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'Internal server error' })
