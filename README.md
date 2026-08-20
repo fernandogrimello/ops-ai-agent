@@ -128,6 +128,7 @@ npx tsx src/server.ts
 - [Decisoes tecnicas](docs/04-decisoes-tecnicas.md)
 - [Problemas e solucoes](docs/05-problemas-e-solucoes.md)
 - [Testes](docs/06-testes.md)
+- [Guia de instalacao](docs/GETTING_STARTED.md)
 
 ## Desafios encontrados
 
