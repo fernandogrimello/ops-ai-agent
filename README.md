@@ -59,7 +59,7 @@ WhatsApp -> WAHA -> n8n Webhook -> API (Node.js/Express) -> IA classifica -> Pos
 | POST | /auth/login | Login com JWT |
 | GET | /customers | Lista clientes |
 | POST | /customers | Cria cliente |
-| GET | /tickets | Lista atendimentos |
+| GET | /tickets | Lista atendimentos (paginado: ?page=1&limit=20&status=OPEN&priority=CRITICAL) |
 | POST | /tickets | Cria atendimento com classificacao por IA |
 | POST | /agent/chat | Conversa com o agente operacional |
 | GET | /agent/logs | Historico de acoes do agente |
@@ -86,7 +86,7 @@ cd apps/api && npm test
 | contract.test.ts | 5 | Contrato — garante que a API nao quebra o frontend |
 | webhook.test.ts | 5 | Webhook — simula payloads reais da Meta WhatsApp |
 | ticket.tools.test.ts | 9 | Unitario — ferramentas do agente |
-| **Total** | **102** | **79%** |
+| **Total** | **106** | **79%** |
 
 ### Teste de performance (k6)
 
