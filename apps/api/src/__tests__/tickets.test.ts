@@ -89,3 +89,72 @@ describe("Tickets", () => {
     })
   })
 })
+
+describe("Ticket por ID", () => {
+  let ticketId: string
+
+  beforeAll(async () => {
+    const res = await request(app)
+      .get("/tickets")
+      .set("Authorization", `Bearer ${token}`)
+    if (res.body.length > 0) {
+      ticketId = res.body[0].id
+    }
+  })
+
+  describe("GET /tickets/:id", () => {
+    it("deve retornar ticket pelo id", async () => {
+      if (!ticketId) return
+      const res = await request(app)
+        .get(`/tickets/${ticketId}`)
+        .set("Authorization", `Bearer ${token}`)
+
+      expect(res.status).toBe(200)
+      expect(res.body).toHaveProperty("id", ticketId)
+      expect(res.body).toHaveProperty("customer")
+    })
+
+    it("deve retornar 404 para id inexistente", async () => {
+      const res = await request(app)
+        .get("/tickets/id-inexistente-xyz")
+        .set("Authorization", `Bearer ${token}`)
+
+      expect(res.status).toBe(404)
+    })
+
+    it("deve retornar 401 sem token", async () => {
+      const res = await request(app).get("/tickets/qualquer-id")
+      expect(res.status).toBe(401)
+    })
+  })
+
+  describe("PUT /tickets/:id", () => {
+    it("deve atualizar status do ticket", async () => {
+      if (!ticketId) return
+      const res = await request(app)
+        .put(`/tickets/${ticketId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({ status: "IN_PROGRESS" })
+
+      expect(res.status).toBe(200)
+      expect(res.body).toHaveProperty("status", "IN_PROGRESS")
+    })
+
+    it("deve retornar 404 para ticket inexistente", async () => {
+      const res = await request(app)
+        .put("/tickets/id-inexistente-xyz")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ status: "RESOLVED" })
+
+      expect(res.status).toBe(404)
+    })
+
+    it("deve retornar 401 sem token", async () => {
+      const res = await request(app)
+        .put("/tickets/qualquer-id")
+        .send({ status: "RESOLVED" })
+
+      expect(res.status).toBe(401)
+    })
+  })
+})
