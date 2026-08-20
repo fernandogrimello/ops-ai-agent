@@ -75,3 +75,10 @@ jobs:
           JWT_SECRET: ci-secret-key-for-testing
           GEMINI_API_KEY: fake-key-for-testing
           WAHA_API_KEY: fake-waha-key
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: apps/web
+
+      - name: Run frontend tests
+        run: npm test
+        working-directory: apps/web
