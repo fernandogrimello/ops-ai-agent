@@ -7,6 +7,27 @@ Plataforma de automacao operacional com IA para empresas de servicos.
 
 Desenvolvido como laboratorio pratico para explorar agentes de IA, automacao de processos e integracao entre APIs REST, banco de dados e ferramentas externas. O cenario ficticio e a ClimaTech, empresa de manutencao e instalacao de ar-condicionado.
 
+
+## Screenshots
+
+### Login
+
+### Dashboard de Atendimentos
+
+### Agente IA
+
+
+## Screenshots
+
+### Login
+![Login](docs/screenshots/login.png)
+
+### Dashboard de Atendimentos
+![Dashboard](docs/screenshots/dashboard.png)
+
+### Agente IA
+![Agente IA](docs/screenshots/agent.png)
+
 ## O problema
 
 Empresas de servicos recebem dezenas de solicitacoes por dia e perdem tempo classificando manualmente cada uma, cadastrando clientes, criando tarefas e distribuindo os servicos. O objetivo deste projeto e automatizar esse fluxo usando IA.
