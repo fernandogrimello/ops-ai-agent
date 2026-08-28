@@ -47,7 +47,7 @@ export default function DashboardPage() {
         api.get("/tickets"),
         api.get("/agent/logs"),
       ])
-      setTickets(ticketsRes.data)
+      setTickets(Array.isArray(ticketsRes.data) ? ticketsRes.data : ticketsRes.data.data || ticketsRes.data.tickets || [])
       setLogs(logsRes.data)
     } catch (err: any) {
       if (err?.response?.status === 401) router.push("/login")
