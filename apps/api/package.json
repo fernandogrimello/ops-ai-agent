@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "seed": "tsx prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -41,5 +42,8 @@
     "ts-jest": "^29.4.12",
     "ts-node": "^10.9.2",
     "typescript": "~5.8.0"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }
