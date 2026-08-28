@@ -1,4 +1,4 @@
-# ops-ai-agent (Em Construção)
+# ops-ai-agent
 
 [![CI](https://github.com/fernandogrimello/ops-ai-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/fernandogrimello/ops-ai-agent/actions/workflows/ci.yml)
 
@@ -134,6 +134,7 @@ npx tsx src/server.ts
 | PostgreSQL | 5433 |
 | n8n | 5678 |
 | WAHA | 3002 |
+| OpenClaw | 18789 |
 
 ## Documentacao
 
