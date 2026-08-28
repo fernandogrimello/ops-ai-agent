@@ -39,3 +39,26 @@ Frontend (Next.js) -> API REST (Node.js) -> PostgreSQL
 5. Ticket salvo com classificacao
 6. Se CRITICAL: n8n cria tarefa automaticamente
 7. Dashboard exibe ticket classificado
+
+
+## Fluxo WhatsApp (integracao completa)
+
+1. Cliente envia mensagem no WhatsApp
+2. WAHA (porta 3002) recebe via webhook
+3. n8n (porta 5678) processa o payload
+4. HTTP Request chama POST http://172.17.0.1:3001/tickets
+5. API Node.js classifica com Google Gemini
+6. Ticket salvo no PostgreSQL com categoria e prioridade
+7. n8n chama WAHA POST /api/sendText
+8. Cliente recebe resposta automatica com ID do ticket
+
+## OpenClaw Gateway
+
+O OpenClaw roda na porta 18789 como gateway de agentes, expondo:
+- Endpoint OpenAI-compativel: POST /v1/chat/completions
+- Modelo: google/gemini-3.5-flash
+- Autenticacao: Bearer token
+- SKILL.md da ClimaTech define o comportamento do agente
+
+Para producao, o n8n pode chamar o OpenClaw diretamente em vez da API,
+delegando toda a logica de classificacao e resposta ao agente.
