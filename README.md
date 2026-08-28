@@ -37,7 +37,21 @@ Empresas de servicos recebem dezenas de solicitacoes por dia e perdem tempo clas
 
 ## Arquitetura
 
-WhatsApp -> WAHA -> n8n Webhook -> API (Node.js/Express) -> IA classifica -> PostgreSQL -> WAHA responde ao cliente
+Cliente envia mensagem no WhatsApp
+        |
+WAHA recebe via webhook
+        |
+n8n processa e chama API REST
+        |
+API Node.js/Express
+        |
+Google Gemini classifica: categoria, prioridade, resumo, acao
+        |
+PostgreSQL salva o atendimento
+        |
+OpenClaw gateway disponibiliza agente via HTTP
+        |
+WAHA envia resposta automatica ao cliente
 
 ## Tecnologias
 
@@ -46,6 +60,7 @@ WhatsApp -> WAHA -> n8n Webhook -> API (Node.js/Express) -> IA classifica -> Pos
 | Backend | Node.js, Express, TypeScript, Prisma ORM |
 | Banco | PostgreSQL 16 |
 | IA | Google Gemini API, agente com ferramentas |
+| Agente Gateway | OpenClaw (skills, memoria, canais) |
 | WhatsApp | WAHA (engine NOWEB) |
 | Automacao | n8n (webhook + HTTP requests) |
 | Infra | Docker, Docker Compose |
