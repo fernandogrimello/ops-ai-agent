@@ -62,7 +62,7 @@ describe("Customers", () => {
         .send({
           name: "Cliente Teste Automatizado",
           email: `teste.${timestamp}@climatech.com`,
-          phone: "61999999999",
+          phone: `6199999${timestamp}`,
           company: "Empresa Teste"
         })
 
@@ -89,7 +89,7 @@ describe("Customers", () => {
         .send({
           name: "Joao Silva",
           email: "joao@empresa.com",
-          phone: "61999999999",
+          phone: `6199999${timestamp}`,
           company: "Empresa ABC"
         })
 
@@ -100,7 +100,7 @@ describe("Customers", () => {
         .send({
           name: "Joao Silva",
           email: "joao@empresa.com",
-          phone: "61999999999",
+          phone: `6199999${timestamp}`,
           company: "Empresa ABC"
         })
 
@@ -194,7 +194,7 @@ describe("Customer por ID", () => {
         .send({
           name: "Customer Para Deletar",
           email: `deletar.${timestamp}@teste.com`,
-          phone: "61999999999",
+          phone: `6199999${timestamp}`,
           company: "Empresa Teste"
         })
 
