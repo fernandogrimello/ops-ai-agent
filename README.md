@@ -202,3 +202,53 @@ Esta vulnerabilidade esta presente internamente no Prisma ORM e nao e exposta di
 A aplicacao sera atualizada assim que o Prisma lanctar uma versao 7.x com o fix incorporado.
 
 Referencia: https://github.com/advisories/GHSA-ggr8-5vv4-36mx
+
+
+## Infraestrutura e Backbone
+
+Este projeto vai além de um simples deploy de backend e frontend.
+
+Para funcionar em producao com todas as funcionalidades — WhatsApp, agentes de IA, automacao de workflows e gateway OpenClaw — ele requer uma infraestrutura dedicada com multiplos servicos rodando simultaneamente:
+
+| Servico   | Funcao                                      | Porta |
+|-----------|---------------------------------------------|-------|
+| API       | Backend Node.js com classificacao por IA    | 3001  |
+| Frontend  | Dashboard Next.js                           | 3000  |
+| PostgreSQL| Banco de dados relacional                   | 5433  |
+| n8n       | Orquestrador de workflows e automacoes      | 5678  |
+| WAHA      | Bridge HTTP para WhatsApp                   | 3002  |
+| OpenClaw  | Gateway de agentes de IA                    | 18789 |
+
+Diferente de aplicacoes tradicionais onde o deploy resume-se a subir backend, frontend e banco de dados, este projeto exige um servidor dedicado (VPS) com Docker para manter todos os servicos ativos simultaneamente.
+
+### Opcoes de hospedagem recomendadas
+
+Para manter o sistema completo em producao, recomendamos:
+
+| Provedor      | Plano           | Preco aproximado | Observacao                        |
+|---------------|-----------------|------------------|-----------------------------------|
+| Hetzner Cloud | CX22 (2vCPU/4GB)| EUR 3,29/mes     | Melhor custo-beneficio            |
+| DigitalOcean  | Droplet Basic   | USD 6,00/mes     | Interface simples, boa documentacao|
+| Vultr         | Cloud Compute   | USD 6,00/mes     | Alta disponibilidade              |
+
+### Como fazer o deploy em VPS
+
+```bash
+# 1. Clone o repositorio no servidor
+git clone https://github.com/fernandogrimello/ops-ai-agent.git
+cd ops-ai-agent
+
+# 2. Configure as variaveis de ambiente
+cp .env.example .env
+# Edite o .env com suas credenciais
+
+# 3. Suba todos os servicos
+docker compose up -d
+
+# 4. Execute as migrations e seed
+cd apps/api && npm install
+npx prisma migrate deploy
+npx prisma db seed
+```
+
+Com um unico `docker compose up -d`, toda a infraestrutura sobe automaticamente — banco, API, frontend, n8n, WAHA e OpenClaw — pronta para receber mensagens do WhatsApp e processar atendimentos com IA.
