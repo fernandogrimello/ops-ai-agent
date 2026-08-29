@@ -83,6 +83,7 @@ describe("Customers", () => {
     })
 
     it("deve retornar 409 com email duplicado", async () => {
+      const timestamp = Date.now()
       const res = await request(app)
         .post("/customers")
         .set("Authorization", `Bearer ${token}`)
