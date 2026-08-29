@@ -65,6 +65,7 @@ WAHA envia resposta automatica ao cliente
 | Automacao | n8n (webhook + HTTP requests) |
 | Infra | Docker, Docker Compose |
 | Testes | Jest, Supertest, k6 |
+| Code Review | CodeRabbit (AI-powered PR reviews) |
 
 ## API
 
@@ -79,6 +80,7 @@ WAHA envia resposta automatica ao cliente
 | POST | /agent/chat | Conversa com o agente operacional |
 | GET | /agent/logs | Historico de acoes do agente |
 | GET | /health | Health check |
+| POST | /public/quote | Solicitacao de orcamento publica (sem autenticacao) |
 
 ## Testes
 
@@ -145,6 +147,33 @@ npx tsx src/server.ts
 - [Problemas e solucoes](docs/05-problemas-e-solucoes.md)
 - [Testes](docs/06-testes.md)
 - [Guia de instalacao](docs/GETTING_STARTED.md)
+
+## Code Review com CodeRabbit
+
+O projeto usa [CodeRabbit](https://coderabbit.ai) para revisao automatica de Pull Requests com IA.
+
+A configuracao fica em `.coderabbit.yaml` na raiz do projeto e inclui:
+- Revisao em portugues
+- Regras especificas por pasta (API, frontend, Prisma, agentes)
+- Foco em seguranca, integridade de dados e qualidade de codigo
+- Ignorar formatacao (coberta pelo ESLint)
+
+Problemas detectados e corrigidos pelo CodeRabbit no PR de implementacao da landing page:
+- Endpoint autenticado exposto no frontend sem token
+- Race condition no `findFirst` + `create` para customers
+- Campo `phone` sem constraint unica causando duplicatas em producao
+- Mensagem de erro `P2002` generica para conflitos de email e phone
+- `parsed.error.flatten()` retornando objeto em vez de string renderizavel no React
+- `service: ""` causando 400 na API quando usuario nao seleciona opcao
+- Migration sem cleanup de duplicatas antes de adicionar indice unico
+
+## Novas funcionalidades (landing page)
+
+### Pagina de captura de leads
+Disponivel em `/landing`, permite que visitantes solicitem orcamento sem precisar fazer login.
+
+### Endpoint publico
+`POST /public/quote` — recebe nome, telefone e tipo de servico, cria o cliente no banco e abre um ticket automaticamente com classificacao por IA.
 
 ## Desafios encontrados
 
