@@ -44,7 +44,8 @@ export async function createCustomer(req: AuthRequest, res: Response): Promise<v
     res.status(201).json(customer)
   } catch (err: any) {
     if (err.code === 'P2002') {
-      res.status(409).json({ error: 'Email already in use' })
+      const field = err.meta?.target?.includes('email') ? 'Email' : err.meta?.target?.includes('phone') ? 'Phone' : 'Field'
+      res.status(409).json({ error: `${field} already in use` })
       return
     }
     console.error(err)
