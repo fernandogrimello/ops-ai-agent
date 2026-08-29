@@ -24,11 +24,12 @@ router.post('/quote', async (req: Request, res: Response): Promise<void> => {
 
     const { name, phone, service } = parsed.data
 
-    const customer = await prisma.customer.upsert({
-      where: { phone },
-      update: { name },
-      create: { name, phone },
-    })
+    let customer = await prisma.customer.findFirst({ where: { phone } })
+    if (!customer) {
+      customer = await prisma.customer.create({ data: { name, phone } })
+    } else {
+      customer = await prisma.customer.update({ where: { id: customer.id }, data: { name } })
+    }
 
     await prisma.ticket.create({
       data: {
