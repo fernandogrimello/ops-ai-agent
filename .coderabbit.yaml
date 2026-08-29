@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+language: "pt-BR"
+
+reviews:
+  profile: "assertive"
+  request_changes_workflow: false
+  high_level_summary: true
+  collapse_walkthrough: false
+  sequence_diagrams: true
+  changed_files_summary: true
+  review_status: true
+  poem: false
+  auto_review:
+    enabled: true
+    drafts: false
+  instructions: |
+    Este e um monorepo TypeScript fullstack com Node.js/Express no backend e Next.js no frontend.
+    
+    Stack: Node.js, TypeScript, Express, Prisma 7, PostgreSQL, Next.js, Tailwind CSS, Google Gemini API, OpenClaw, n8n, WAHA, Docker.
+    
+    Foque em:
+    - Seguranca: autenticacao JWT, validacao de inputs com Zod, exposicao de credenciais no frontend
+    - Integridade de dados: constraints unicas no Prisma, race conditions, tratamento de erros P2002/P2025
+    - Qualidade: docstrings em funcoes publicas, mensagens de erro renderizaveis no React
+    - Performance: queries N+1, falta de indices no banco
+    
+    Nao comente sobre:
+    - Formatacao (temos ESLint/Prettier)
+    - Imports nao utilizados (TypeScript ja verifica)
+    - Estilo de nomes de variaveis em portugues (projeto biligue intencional)
+
+  path_instructions:
+    - path: "apps/api/src/**"
+      instructions: |
+        Backend Node.js/Express com TypeScript e Prisma 7.
+        Verifique: autenticacao JWT nos endpoints protegidos, validacao Zod nos inputs,
+        tratamento de erros do Prisma (P2002, P2025), foreign keys e constraints.
+        
+    - path: "apps/api/src/__tests__/**"
+      instructions: |
+        Testes Jest + Supertest.
+        Verifique: unicidade dos dados de teste (use timestamps), limpeza apos os testes,
+        cobertura dos casos de erro (401, 404, 409).
+        
+    - path: "apps/web/**"
+      instructions: |
+        Frontend Next.js com App Router e Tailwind CSS.
+        Verifique: variaveis de ambiente para URLs de API (nao hardcode localhost),
+        tratamento de erros nas chamadas fetch, acessibilidade nos formularios.
+        
+    - path: "apps/api/prisma/**"
+      instructions: |
+        Schema Prisma 7 e migrations PostgreSQL.
+        Verifique: constraints unicas necessarias, indices para campos de busca frequente,
+        migrations com cleanup de dados duplicados antes de adicionar constraints unicas.
+        
+    - path: "agents/**"
+      instructions: |
+        Skills e configuracao do agente OpenClaw.
+        Verifique: descricao clara das ferramentas, casos de uso bem definidos,
+        instrucoes de memoria e contexto coerentes.
+
+chat:
+  auto_reply: true
