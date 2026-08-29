@@ -4,6 +4,10 @@ import { useState } from "react"
 
 const API_URL = "http://localhost:3001"
 
+/**
+ * Pagina de landing da ClimaTech para captacao de leads.
+ * Exibe formulario de solicitacao de orcamento com nome, telefone e tipo de servico.
+ */
 export default function LandingPage() {
   const [nome, setNome] = useState("")
   const [telefone, setTelefone] = useState("")
@@ -11,6 +15,10 @@ export default function LandingPage() {
   const [enviado, setEnviado] = useState(false)
   const [erro, setErro] = useState("")
 
+  /**
+   * Envia os dados do formulario para a API de clientes.
+   * Atualiza o estado de enviado ou exibe mensagem de erro.
+   */
   async function handleSubmit(e: any) {
     e.preventDefault()
     
