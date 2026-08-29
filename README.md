@@ -1,21 +1,9 @@
 # ops-ai-agent
-
 [![CI](https://github.com/fernandogrimello/ops-ai-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/fernandogrimello/ops-ai-agent/actions/workflows/ci.yml)
 
+Plataforma de automação operacional com IA para empresas de serviços.
 
-Plataforma de automacao operacional com IA para empresas de servicos.
-
-Desenvolvido como laboratorio pratico para explorar agentes de IA, automacao de processos e integracao entre APIs REST, banco de dados e ferramentas externas. O cenario ficticio e a ClimaTech, empresa de manutencao e instalacao de ar-condicionado.
-
-
-## Screenshots
-
-### Login
-
-### Dashboard de Atendimentos
-
-### Agente IA
-
+Desenvolvido como laboratório prático para explorar agentes de IA, automação de processos e integração entre APIs REST, banco de dados e ferramentas externas. O cenário fictício é a ClimaTech, empresa de manutenção e instalação de ar-condicionado.
 
 ## Screenshots
 
@@ -33,25 +21,24 @@ Desenvolvido como laboratorio pratico para explorar agentes de IA, automacao de 
 
 ## O problema
 
-Empresas de servicos recebem dezenas de solicitacoes por dia e perdem tempo classificando manualmente cada uma, cadastrando clientes, criando tarefas e distribuindo os servicos. O objetivo deste projeto e automatizar esse fluxo usando IA.
+Empresas de serviços recebem dezenas de solicitações por dia e perdem tempo classificando manualmente cada uma, cadastrando clientes, criando tarefas e distribuindo os serviços. O objetivo deste projeto é automatizar esse fluxo usando IA.
 
 ## Arquitetura
-
 Cliente envia mensagem no WhatsApp
-        |
+|
 WAHA recebe via webhook
-        |
+|
 n8n processa e chama API REST
-        |
+|
 API Node.js/Express
-        |
-Google Gemini classifica: categoria, prioridade, resumo, acao
-        |
+|
+Google Gemini classifica: categoria, prioridade, resumo, ação
+|
 PostgreSQL salva o atendimento
-        |
+|
 OpenClaw gateway disponibiliza agente via HTTP
-        |
-WAHA envia resposta automatica ao cliente
+|
+WAHA envia resposta automática ao cliente
 
 ## Tecnologias
 
@@ -60,33 +47,35 @@ WAHA envia resposta automatica ao cliente
 | Backend | Node.js, Express, TypeScript, Prisma ORM |
 | Banco | PostgreSQL 16 |
 | IA | Google Gemini API, agente com ferramentas |
-| Agente Gateway | OpenClaw (skills, memoria, canais) |
+| Agente Gateway | OpenClaw (skills, memória, canais) |
 | WhatsApp | WAHA (engine NOWEB) |
-| Automacao | n8n (webhook + HTTP requests) |
+| Automação | n8n (webhook + HTTP requests) |
 | Infra | Docker, Docker Compose |
 | Testes | Jest, Supertest, k6 |
-| Code Review | CodeRabbit (AI-powered PR reviews) |
+| Code Review | CodeRabbit (revisão de PR com IA) |
 
 ## API
 
-| Metodo | Rota | Descricao |
+| Método | Rota | Descrição |
 |---|---|---|
-| POST | /auth/register | Cadastro de usuario |
+| POST | /auth/register | Cadastro de usuário |
 | POST | /auth/login | Login com JWT |
 | GET | /customers | Lista clientes |
 | POST | /customers | Cria cliente |
 | GET | /tickets | Lista atendimentos (paginado: ?page=1&limit=20&status=OPEN&priority=CRITICAL) |
-| POST | /tickets | Cria atendimento com classificacao por IA |
+| POST | /tickets | Cria atendimento com classificação por IA |
 | POST | /agent/chat | Conversa com o agente operacional |
-| GET | /agent/logs | Historico de acoes do agente |
+| GET | /agent/logs | Histórico de ações do agente |
 | GET | /health | Health check |
-| POST | /public/quote | Solicitacao de orcamento publica (sem autenticacao) |
+| POST | /public/quote | Solicitação de orçamento pública (sem autenticação) |
 
 ## Testes
 
 ### Suite de testes (Jest + Supertest)
 
+```bash
 cd apps/api && npm test
+```
 
 | Suite | Testes | Cobertura |
 |---|---|---|
@@ -94,31 +83,34 @@ cd apps/api && npm test
 | tickets.test.ts | 15 | CRUD + GET/:id + PUT/:id + mock IA |
 | customers.test.ts | 16 | CRUD + GET/:id + PUT/:id + DELETE/:id |
 | agent.test.ts | 5 | Chat + logs + mock IA |
-| security.test.ts | 12 | Headers, auth, injecao, rate limit |
-| ai.service.test.ts | 4 | Unitario — classificacao IA, fallbacks |
-| ops.agent.test.ts | 6 | Unitario — agente, tool calls, logs |
+| security.test.ts | 12 | Headers, auth, injeção, rate limit |
+| ai.service.test.ts | 4 | Unitário — classificação IA, fallbacks |
+| ops.agent.test.ts | 6 | Unitário — agente, tool calls, logs |
 | components.test.tsx | 13 | Frontend — PriorityBadge, StatusBadge, StatsCard, TicketTable |
 | auth.spec.ts | 4 | E2E — login, erro, redirecionamento |
-| dashboard.spec.ts | 4 | E2E — metricas, tickets, abas, logout |
-| contract.test.ts | 5 | Contrato — garante que a API nao quebra o frontend |
+| dashboard.spec.ts | 4 | E2E — métricas, tickets, abas, logout |
+| contract.test.ts | 5 | Contrato — garante que a API não quebra o frontend |
 | webhook.test.ts | 5 | Webhook — simula payloads reais da Meta WhatsApp |
-| ticket.tools.test.ts | 9 | Unitario — ferramentas do agente |
+| ticket.tools.test.ts | 9 | Unitário — ferramentas do agente |
 | **Total** | **106** | **79%** |
 
 ### Teste de performance (k6)
 
+```bash
 k6 run tests/performance/load-test.js
+```
 
-| Metrica | Resultado | Threshold |
+| Métrica | Resultado | Threshold |
 |---|---|---|
-| p95 latencia | 10ms | < 500ms |
+| p95 latência | 10ms | < 500ms |
 | Taxa de erros | 0% | < 5% |
-| Requisicoes/s | 22 | -- |
-| Usuarios simultaneos | 10 | -- |
+| Requisições/s | 22 | -- |
+| Usuários simultâneos | 10 | -- |
 | Checks passando | 6370/6370 | 100% |
 
 ## Como executar
 
+```bash
 git clone https://github.com/fernandogrimello/ops-ai-agent.git
 cd ops-ai-agent
 cp .env.example .env
@@ -126,10 +118,11 @@ docker compose up -d
 cd apps/api && npm install
 npx prisma migrate dev
 npx tsx src/server.ts
+```
 
-## Servicos
+## Serviços
 
-| Servico | Porta |
+| Serviço | Porta |
 |---|---|
 | API | 3001 |
 | Frontend | 3000 |
@@ -138,61 +131,62 @@ npx tsx src/server.ts
 | WAHA | 3002 |
 | OpenClaw | 18789 |
 
-## Documentacao
+## Documentação
 
 - [Arquitetura](docs/01-arquitetura.md)
 - [Banco de dados](docs/02-banco-de-dados.md)
 - [Agente IA](docs/03-agente.md)
-- [Decisoes tecnicas](docs/04-decisoes-tecnicas.md)
-- [Problemas e solucoes](docs/05-problemas-e-solucoes.md)
+- [Decisões técnicas](docs/04-decisoes-tecnicas.md)
+- [Problemas e soluções](docs/05-problemas-e-solucoes.md)
 - [Testes](docs/06-testes.md)
-- [Guia de instalacao](docs/GETTING_STARTED.md)
+- [Guia de instalação](docs/GETTING_STARTED.md)
 
 ## Code Review com CodeRabbit
 
-O projeto usa [CodeRabbit](https://coderabbit.ai) para revisao automatica de Pull Requests com IA.
+O projeto usa [CodeRabbit](https://coderabbit.ai) para revisão automática de Pull Requests com IA.
 
-A configuracao fica em `.coderabbit.yaml` na raiz do projeto e inclui:
-- Revisao em portugues
-- Regras especificas por pasta (API, frontend, Prisma, agentes)
-- Foco em seguranca, integridade de dados e qualidade de codigo
-- Ignorar formatacao (coberta pelo ESLint)
+A configuração fica em `.coderabbit.yaml` na raiz do projeto e inclui:
+- Revisão em português
+- Regras específicas por pasta (API, frontend, Prisma, agentes)
+- Foco em segurança, integridade de dados e qualidade de código
+- Ignora formatação (coberta pelo ESLint)
 
-Problemas detectados e corrigidos pelo CodeRabbit no PR de implementacao da landing page:
+Problemas detectados e corrigidos pelo CodeRabbit no PR de implementação da landing page:
 - Endpoint autenticado exposto no frontend sem token
 - Race condition no `findFirst` + `create` para customers
-- Campo `phone` sem constraint unica causando duplicatas em producao
-- Mensagem de erro `P2002` generica para conflitos de email e phone
-- `parsed.error.flatten()` retornando objeto em vez de string renderizavel no React
-- `service: ""` causando 400 na API quando usuario nao seleciona opcao
-- Migration sem cleanup de duplicatas antes de adicionar indice unico
+- Campo `phone` sem constraint única causando duplicatas em produção
+- Mensagem de erro `P2002` genérica para conflitos de email e phone
+- `parsed.error.flatten()` retornando objeto em vez de string renderizável no React
+- `service: ""` causando 400 na API quando usuário não seleciona opção
+- Migration sem cleanup de duplicatas antes de adicionar índice único
 
 ## Novas funcionalidades (landing page)
 
-### Pagina de captura de leads
-Disponivel em `/landing`, permite que visitantes solicitem orcamento sem precisar fazer login.
+### Página de captura de leads
+Disponível em `/landing`, permite que visitantes solicitem orçamento sem precisar fazer login.
 
-### Endpoint publico
-`POST /public/quote` — recebe nome, telefone e tipo de servico, cria o cliente no banco e abre um ticket automaticamente com classificacao por IA.
+### Endpoint público
+`POST /public/quote` — recebe nome, telefone e tipo de serviço, cria o cliente no banco e abre um ticket automaticamente com classificação por IA.
 
 ## Desafios encontrados
 
 - Prisma 7 mudou completamente a forma de configurar datasource
-- n8n dentro do Docker nao acessa localhost do host -- necessario usar IP 172.17.0.1
-- Google Gemini descontinuou modelos antigos -- migrado para gemini-3.5-flash
-- SDK @google/generative-ai incompativel com chaves AQ. -- migrado para @google/genai
-- WAHA engine WEBJS apresentou erro No LID for user -- migrado para NOWEB
-- TypeScript 7 incompativel com ts-jest -- downgrade para TS 5.8
+- n8n dentro do Docker não acessa localhost do host — necessário usar IP 172.17.0.1
+- Google Gemini descontinuou modelos antigos — migrado para gemini-3.5-flash
+- SDK @google/generative-ai incompatível com chaves AQ. — migrado para @google/genai
+- WAHA engine WEBJS apresentou erro No LID for user — migrado para NOWEB
+- TypeScript 7 incompatível com ts-jest — downgrade para TS 5.8
+
 ## Roadmap de testes
 
-O projeto esta em fase de evolucao para producao. Abaixo o status atual e o que esta sendo implementado:
+O projeto está em fase de evolução para produção. Abaixo o status atual:
 
 ### Implementado
 
 | Tipo | Ferramenta | Status |
 |---|---|---|
-| Integracao (auth, tickets, customers, agent) | Jest + Supertest | 33 testes passando |
-| Seguranca (headers, auth, injecao) | Jest + Supertest | 10 testes passando |
+| Integração (auth, tickets, customers, agent) | Jest + Supertest | 33 testes passando |
+| Segurança (headers, auth, injeção) | Jest + Supertest | 10 testes passando |
 | Performance - load test | k6 | p95=10ms, 0% erros, 10 VUs |
 
 ### Implementado recentemente
@@ -200,8 +194,8 @@ O projeto esta em fase de evolucao para producao. Abaixo o status atual e o que 
 | Tipo | Ferramenta | Status |
 |---|---|---|
 | Cobertura de controllers | Jest + Supertest | GET/:id, PUT, DELETE cobertos |
-| Testes unitarios ai.service | Jest | 100% cobertura, fallbacks testados |
-| Testes unitarios ticket.tools | Jest | 100% cobertura, Prisma mockado |
+| Testes unitários ai.service | Jest | 100% cobertura, fallbacks testados |
+| Testes unitários ticket.tools | Jest | 100% cobertura, Prisma mockado |
 | Performance - stress test | k6 | 100 VUs, p95=11ms, 0% erros |
 | Performance - spike test | k6 | Pico 100 VUs, p95=15ms, 0% erros |
 | Performance - soak test | k6 | 30min, p95=13ms, sem memory leak |
@@ -210,68 +204,62 @@ O projeto esta em fase de evolucao para producao. Abaixo o status atual e o que 
 
 ### Pendente
 
-| Tipo | Descricao |
+| Tipo | Descrição |
 |---|---|
+| Deploy em produção | Render (API + Frontend) |
+| Testes E2E completos | Playwright cobrindo fluxo WhatsApp |
 
-| Testes de contrato | Garantir que o contrato da API nao quebra o frontend |
-
-| Frontend - testes E2E | Playwright simulando fluxo real no browser |
-| Webhook - testes de integracao | Simular payloads da Meta WhatsApp no n8n |
-
-## Seguranca e vulnerabilidades conhecidas
+## Segurança e vulnerabilidades conhecidas
 
 ### CVE: deepmerge-ts (GHSA-ggr8-5vv4-36mx)
 
-**Severidade:** High
-**Componente afetado:** deepmerge-ts < 8.0.0 (dependencia interna do Prisma 7.x)
-**Status:** Aguardando correcao upstream pelo time do Prisma
+**Severidade:** High  
+**Componente afetado:** deepmerge-ts < 8.0.0 (dependência interna do Prisma 7.x)  
+**Status:** Aguardando correção upstream pelo time do Prisma
 
-Esta vulnerabilidade esta presente internamente no Prisma ORM e nao e exposta diretamente pelo codigo da aplicacao. O fix disponivel via npm audit fix --force exigiria downgrade do Prisma de 7.x para 6.x, o que quebraria a arquitetura atual que usa prisma.config.ts e o adapter PrismaPg.
+Esta vulnerabilidade está presente internamente no Prisma ORM e não é exposta diretamente pelo código da aplicação. O fix disponível via `npm audit fix --force` exigiria downgrade do Prisma de 7.x para 6.x, o que quebraria a arquitetura atual que usa `prisma.config.ts` e o adapter PrismaPg.
 
-A aplicacao sera atualizada assim que o Prisma lanctar uma versao 7.x com o fix incorporado.
+A aplicação será atualizada assim que o Prisma lançar uma versão 7.x com o fix incorporado.
 
-Referencia: https://github.com/advisories/GHSA-ggr8-5vv4-36mx
-
+Referência: https://github.com/advisories/GHSA-ggr8-5vv4-36mx
 
 ## Infraestrutura e Backbone
 
 Este projeto vai além de um simples deploy de backend e frontend.
 
-Para funcionar em producao com todas as funcionalidades — WhatsApp, agentes de IA, automacao de workflows e gateway OpenClaw — ele requer uma infraestrutura dedicada com multiplos servicos rodando simultaneamente:
+Para funcionar em produção com todas as funcionalidades — WhatsApp, agentes de IA, automação de workflows e gateway OpenClaw — ele requer uma infraestrutura dedicada com múltiplos serviços rodando simultaneamente:
 
-| Servico   | Funcao                                      | Porta |
-|-----------|---------------------------------------------|-------|
-| API       | Backend Node.js com classificacao por IA    | 3001  |
-| Frontend  | Dashboard Next.js                           | 3000  |
-| PostgreSQL| Banco de dados relacional                   | 5433  |
-| n8n       | Orquestrador de workflows e automacoes      | 5678  |
-| WAHA      | Bridge HTTP para WhatsApp                   | 3002  |
-| OpenClaw  | Gateway de agentes de IA                    | 18789 |
+| Serviço | Função | Porta |
+|---|---|---|
+| API | Backend Node.js com classificação por IA | 3001 |
+| Frontend | Dashboard Next.js | 3000 |
+| PostgreSQL | Banco de dados relacional | 5433 |
+| n8n | Orquestrador de workflows e automações | 5678 |
+| WAHA | Bridge HTTP para WhatsApp | 3002 |
+| OpenClaw | Gateway de agentes de IA | 18789 |
 
-Diferente de aplicacoes tradicionais onde o deploy resume-se a subir backend, frontend e banco de dados, este projeto exige um servidor dedicado (VPS) com Docker para manter todos os servicos ativos simultaneamente.
+Diferente de aplicações tradicionais onde o deploy resume-se a subir backend, frontend e banco de dados, este projeto exige um servidor dedicado (VPS) com Docker para manter todos os serviços ativos simultaneamente.
 
-### Opcoes de hospedagem recomendadas
+### Opções de hospedagem recomendadas
 
-Para manter o sistema completo em producao, recomendamos:
-
-| Provedor      | Plano           | Preco aproximado | Observacao                        |
-|---------------|-----------------|------------------|-----------------------------------|
-| Hetzner Cloud | CX22 (2vCPU/4GB)| EUR 3,29/mes     | Melhor custo-beneficio            |
-| DigitalOcean  | Droplet Basic   | USD 6,00/mes     | Interface simples, boa documentacao|
-| Vultr         | Cloud Compute   | USD 6,00/mes     | Alta disponibilidade              |
+| Provedor | Plano | Preço aproximado | Observação |
+|---|---|---|---|
+| Hetzner Cloud | CX22 (2vCPU/4GB) | EUR 3,29/mês | Melhor custo-benefício |
+| DigitalOcean | Droplet Basic | USD 6,00/mês | Interface simples, boa documentação |
+| Vultr | Cloud Compute | USD 6,00/mês | Alta disponibilidade |
 
 ### Como fazer o deploy em VPS
 
 ```bash
-# 1. Clone o repositorio no servidor
+# 1. Clone o repositório no servidor
 git clone https://github.com/fernandogrimello/ops-ai-agent.git
 cd ops-ai-agent
 
-# 2. Configure as variaveis de ambiente
+# 2. Configure as variáveis de ambiente
 cp .env.example .env
 # Edite o .env com suas credenciais
 
-# 3. Suba todos os servicos
+# 3. Suba todos os serviços
 docker compose up -d
 
 # 4. Execute as migrations e seed
@@ -280,4 +268,10 @@ npx prisma migrate deploy
 npx prisma db seed
 ```
 
-Com um unico `docker compose up -d`, toda a infraestrutura sobe automaticamente — banco, API, frontend, n8n, WAHA e OpenClaw — pronta para receber mensagens do WhatsApp e processar atendimentos com IA.
+Com um único `docker compose up -d`, toda a infraestrutura sobe automaticamente — banco, API, frontend, n8n, WAHA e OpenClaw — pronta para receber mensagens do WhatsApp e processar atendimentos com IA.
+
+## Autor
+
+Luiz Fernando Grimello  
+github.com/fernandogrimello  
+linkedin.com/in/luiz-fernando-grimello-6568b4358
