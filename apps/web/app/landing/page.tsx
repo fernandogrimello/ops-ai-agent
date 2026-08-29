@@ -22,9 +22,10 @@ export default function LandingPage() {
   async function handleSubmit(e: any) {
     e.preventDefault()
     
-    const res = await fetch(API_URL + "/customers", {
+    const res = await fetch(API_URL + "/public/quote", {
       method: "POST",
-      body: JSON.stringify({ name: nome, phone: telefone }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: nome, phone: telefone, service: servico }),
     })
 
     const data = await res.json()

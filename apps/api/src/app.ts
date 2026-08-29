@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth.routes"
 import customerRoutes from "./routes/customer.routes"
 import ticketRoutes from "./routes/ticket.routes"
 import agentRoutes from "./routes/agent.routes"
+import publicRoutes from "./routes/public.routes"
 
 dotenv.config()
 
@@ -51,5 +52,6 @@ app.use("/auth", authRoutes)
 app.use("/customers", customerRoutes)
 app.use("/tickets", ticketRoutes)
 app.use("/agent", agentRoutes)
+app.use("/public", publicRoutes)
 
 export default app
