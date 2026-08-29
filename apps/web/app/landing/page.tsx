@@ -25,7 +25,7 @@ export default function LandingPage() {
     const res = await fetch(API_URL + "/public/quote", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: nome, phone: telefone, service: servico }),
+      body: JSON.stringify({ name: nome, phone: telefone, ...(servico ? { service: servico } : {}) }),
     })
 
     const data = await res.json()
