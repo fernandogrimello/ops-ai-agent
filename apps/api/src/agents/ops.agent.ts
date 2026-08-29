@@ -110,15 +110,19 @@ Responda ao usuario em portugues de forma clara, concisa e profissional. Nao use
     finalResponse = text
   }
 
-  await prisma.agentLog.create({
-    data: {
-      action: toolUsed || 'AGENT_RESPONSE',
-      input: userMessage,
-      output: finalResponse,
-      ticketId: ticketId || null,
-      userId,
-    }
-  })
+  try {
+    await prisma.agentLog.create({
+      data: {
+        action: toolUsed || 'AGENT_RESPONSE',
+        input: userMessage,
+        output: finalResponse,
+        ticketId: ticketId || null,
+        userId,
+      }
+    })
+  } catch {
+    // userId can be stale after seed reset — log silently
+  }
 
   return { response: finalResponse, toolUsed, toolResult }
 }
